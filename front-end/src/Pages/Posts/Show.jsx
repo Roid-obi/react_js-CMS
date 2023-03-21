@@ -27,7 +27,7 @@ function PostShow() {
     fetchPost();
   }, [id]);
   return (
-    <Container className="mt-3">
+    <Container className="mt-4">
     {post ? (
       <>
       <Row>
@@ -40,7 +40,7 @@ function PostShow() {
                 </div>
                 <div className="text-center mt-3 mb-5">
                   <p className="mb-0 fs-3 fw-bold">{post.title}</p>
-                  <p>{post.content}</p>
+                  <p>{post.body}</p>
                 </div>
                   <small className="text-muted float-end">{post.create_at}</small>
                     <span className='hover__' onClick={goBack}>
@@ -51,7 +51,7 @@ function PostShow() {
         </Col>
       </Row>
 
-      <div className='mt-2'>
+      <div className='mt-5'>
             <h2>Comments ( {comment.length} )</h2>
               {comment.map((comment) => (
                 <Card key={comment.id} className="my-3">
