@@ -7,7 +7,7 @@ import './Show.css';
 
 function PostShow() {
   const [post, setPost] = useState(null);
-  // const [comment, setComment] = useState(null);
+  const [comment, setComment] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ function PostShow() {
     async function fetchPost() {
       const response = await axios.get(`http://localhost:8000/api/posts/${id}`);
       setPost(response.data.post);
-      // setComment(response.data.comment);
+      setComment(response.data.comment);
       console.log(response.data.post);
       console.log(response.data.comment);
 
@@ -36,7 +36,7 @@ function PostShow() {
             <Card.Body>
                 <div>
                     <small className="text-muted">{post.views}x ditonton</small>
-                    <p className="text-muted float-end fs-6">Created by : <span className="fw-bold">{post.user}</span></p>
+                    <p className="text-muted float-end fs-6">Created by : <span className="fw-bold">{post.created_by}</span></p>
                 </div>
                 <div className="text-center mt-3 mb-5">
                   <p className="mb-0 fs-3 fw-bold">{post.title}</p>
@@ -51,18 +51,18 @@ function PostShow() {
         </Col>
       </Row>
 
-      {/* <div className='mt-2'>
+      <div className='mt-2'>
             <h2>Comments ( {comment.length} )</h2>
               {comment.map((comment) => (
                 <Card key={comment.id} className="my-3">
                   <Card.Body>
                     <Card.Title className='text-break'>{comment.user.name}</Card.Title>
-                    <Card.Text>{comment.text}</Card.Text>
+                    <Card.Text>{comment.content}</Card.Text>
                     <small className="text-muted">{comment.created_at}</small>
                   </Card.Body>
                 </Card>
               ))}
-      </div> */}
+      </div>
       </>
       ) : (
         <Loading />
