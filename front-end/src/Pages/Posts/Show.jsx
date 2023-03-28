@@ -36,7 +36,7 @@ function PostShow() {
             <Card.Body>
                 <div>
                     <small className="text-muted">{post.views}x ditonton</small>
-                    <p className="text-muted float-end fs-6">Created by : <span className="fw-bold">{post.created_by}</span></p>
+                    <p className="text-muted float-end fs-6">Created by : <span className="fw-bold">Id-{post.created_by}</span></p>
                 </div>
                 <div className="text-center mt-3 mb-5">
                   <p className="mb-0 fs-3 fw-bold">{post.title}</p>
