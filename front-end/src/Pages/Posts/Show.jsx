@@ -11,7 +11,7 @@ function PostShow() {
   const [text, setText] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  // const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
   // const userId = localStorage.getItem('user_id');
   function goBack() {
     navigate(-1);
@@ -57,8 +57,11 @@ async function handleSubmitComment(e) {
     );
     // perbarui state komentar dengan menambahkan komentar yang baru saja ditambahkan
     setComment((prevComments) => [...prevComments, response.data]);
-    // kosongkan input komentar setelah berhasil ditambahkan
-    setCommentContent('');
+    
+    setCommentContent(''); // kosongkan input komentar setelah berhasil ditambahkan
+
+    window.location.reload(); // memuat ulang halaman
+
   } catch (error) {
     console.error(error);
     // tampilkan pesan kesalahan jika terjadi kesalahan saat mengirim komentar
@@ -92,6 +95,8 @@ async function handleSubmitComment(e) {
       </Row>
 
       {/* tambahkan form untuk menambahkan komentar */}
+      { token ? 
+      <>
       <form className='mt-5' onSubmit={handleSubmitComment}>
         <div className="mb-3">
           <h4 className='ms-1'>Add Comment</h4>
@@ -108,6 +113,14 @@ async function handleSubmitComment(e) {
           Submit
         </button>
       </form>
+      </>
+       :
+      <>
+        <h5 className="mt-5 ms-1">
+          Login jika ingin komen
+        </h5>
+      </>
+      }
       
 
 {/* lihat post */}
