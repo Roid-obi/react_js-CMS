@@ -11,7 +11,7 @@ import axios from 'axios'
 
 function App() {
   const token = localStorage.getItem('token')
-
+// menghapus token
   const handleLogout = async (e) => {
     e.preventDefault()
     try {
@@ -21,6 +21,7 @@ function App() {
       console.log(error)
     }
   }
+
     return (
         <div>
           <Navbar bg="dark" variant="dark">
