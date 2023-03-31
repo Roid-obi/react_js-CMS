@@ -55,12 +55,17 @@ async function handleSubmitComment(e) {
       `http://localhost:8000/api/post/${id}/comments`,
       { content: commentContent }
     );
+
+    const responseComment = await axios.get(`http://localhost:8000/api/posts/${id}`);
+    setComment(responseComment.data.comment)
+
+
     // perbarui state komentar dengan menambahkan komentar yang baru saja ditambahkan
-    setComment((prevComments) => [...prevComments, response.data]);
+    // setComment((prevComments) => [...prevComments, response.data]);
     
     setCommentContent(''); // kosongkan input komentar setelah berhasil ditambahkan
 
-    window.location.reload(); // memuat ulang halaman
+    // window.location.reload(); // memuat ulang halaman
 
   } catch (error) {
     console.error(error);

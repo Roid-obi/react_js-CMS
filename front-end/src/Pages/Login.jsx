@@ -18,6 +18,7 @@ export default function Login() {
       navigate('/')
       let token = response.data.token
       localStorage.setItem('token',token)
+      window.location.reload(); // memuat ulang halaman
     } catch (error) {
         console.error(error)
     }

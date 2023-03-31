@@ -17,6 +17,7 @@ function App() {
     try {
       const response = axios.post('http://localhost:8000/api/logout',token)
       localStorage.removeItem('token')
+      window.location.reload(); // memuat ulang halaman
     } catch (error) {
       console.log(error)
     }

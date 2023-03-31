@@ -52,6 +52,8 @@ return (
                                 <Form.Control name="content" id="content" as="textarea" rows={3} placeholder="Content" />
                             </Form.Group>
 
+                            
+
                             <Button variant="primary" type="submit">
                                 Send
                             </Button>
