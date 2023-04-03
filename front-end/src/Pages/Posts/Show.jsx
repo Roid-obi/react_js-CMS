@@ -4,6 +4,7 @@ import { Card, Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import Loading from './../../Components/Loading';
 import './Show.css';
+import Toast from 'react-bootstrap/Toast';
 
 function PostShow() {
   const [post, setPost] = useState(null);
@@ -16,6 +17,13 @@ function PostShow() {
   function goBack() {
     navigate(-1);
   }
+
+
+  // toats
+  const [showA, setShowA] = useState(false);
+  const toggleShowA = () => setShowA(!showA);
+
+
 
   useEffect(() => {
     async function fetchPost() {
@@ -64,7 +72,7 @@ async function handleSubmitComment(e) {
     // setComment((prevComments) => [...prevComments, response.data]);
     
     setCommentContent(''); // kosongkan input komentar setelah berhasil ditambahkan
-
+    setShowA(true); // set state untuk menampilkan toast
     // window.location.reload(); // memuat ulang halaman
 
   } catch (error) {
@@ -99,7 +107,7 @@ async function handleSubmitComment(e) {
         </Col>
       </Row>
 
-      {/* tambahkan form untuk menambahkan komentar */}
+      {/* form untuk menambahkan komentar */}
       { token ? 
       <>
       <form className='mt-5' onSubmit={handleSubmitComment}>
@@ -126,6 +134,17 @@ async function handleSubmitComment(e) {
         </h5>
       </>
       }
+
+      {/* toast */}
+<Toast show={showA} onClose={toggleShowA} style={{position: 'fixed', top: '10px', right: '10px', zIndex: '9999'}}>
+  <Toast.Header>
+    <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
+    <strong className="me-auto">Info</strong>
+    <small>Baru saja</small>
+  </Toast.Header>
+  <Toast.Body>Komentar berhasil dibuat</Toast.Body>
+</Toast>
+
       
 
 {/* lihat post */}
@@ -136,7 +155,7 @@ async function handleSubmitComment(e) {
                 <Card.Body>
                   <Card.Title className='text-break'>{comment.user && comment.user.name}</Card.Title>
                   <Card.Text>{comment.content}</Card.Text>
-                  <small className="text-muted">{comment.created_at}</small>
+                  <small className="text-muted">{comment.created_at_parse}</small>
                 </Card.Body>
               </Card>
             ))}
