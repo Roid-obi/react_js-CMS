@@ -42,9 +42,9 @@ function App() {
                 <Nav.Item>
                   <Nav.Link href='/logout' className={token ? '' : 'd-none'} onClick={handleLogout} >Logout</Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
+                {/* <Nav.Item>
                   <Nav.Link href="/ResetPassword">Reset-Password</Nav.Link>
-                </Nav.Item>
+                </Nav.Item> */}
               </Nav>
             </Container>
           </Navbar>

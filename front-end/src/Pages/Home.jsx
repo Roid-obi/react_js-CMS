@@ -12,6 +12,7 @@ function Home() {
   // state
   const [email, setEmail] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); 
 
   // style
   const contain = {
@@ -23,6 +24,7 @@ function Home() {
 
   // reset password function
   const handleResetPassword = () => {
+    setIsLoading(true); // set isLoading true saat handleResetPassword dijalankan
     axios.post('http://localhost:8000/api/password/forgot', { email: email }, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -30,6 +32,7 @@ function Home() {
     })
       .then(response => {
         // berhasil
+        setIsLoading(false); // set isLoading false saat handleResetPassword berhasil
         navigate('/ResetPassword');
       })
       .catch(error => {
@@ -49,7 +52,9 @@ function Home() {
               <h1>React.JS</h1>
               <p className="lead">Tutorial FullStack React.js oleh <strong>roidrobih@gmail.com</strong></p>
               <Button href="https://github.com/Roid-obi/react_js-CMS" target="_blank" variant="dark" size="lg">Code</Button>
-              {token ? <Button className='ms-2' onClick={() => setShowModal(true)} variant="dark" size="lg">Reset Password</Button> : '' }
+              {token ? (
+              <Button className='ms-2' onClick={() => setShowModal(true)} variant="dark" size="lg">Reset Password</Button>
+              ) : '' }
               {token ?
                 <Button className='ms-2' href='/posts' variant="dark" size="lg">Get to Posts</Button>
                 :
@@ -73,7 +78,9 @@ function Home() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
-          <Button variant="dark" onClick={handleResetPassword}>Reset Password</Button>
+          <Button variant="dark" onClick={handleResetPassword}>
+            {isLoading ? 'Loading...' : 'Reset Password'}
+          </Button>
         </Modal.Footer>
       </Modal>
     </Container>
