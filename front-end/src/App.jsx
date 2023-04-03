@@ -9,6 +9,7 @@ import ProtectedRoute from "./Routes/ProtectedRoute"
 import Login from "./Pages/Login"
 import axios from 'axios'
 import ResetPassword from "./Pages/ResetPW"
+import Profile from "./Pages/Profile"
 
 function App() {
   const token = localStorage.getItem('token')
@@ -34,6 +35,9 @@ function App() {
                   <Nav.Link href="/">Home</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
+                  <Nav.Link href="/Profile">Profile</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
                   <Nav.Link href="/posts">Posts</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
@@ -42,9 +46,6 @@ function App() {
                 <Nav.Item>
                   <Nav.Link href='/logout' className={token ? '' : 'd-none'} onClick={handleLogout} >Logout</Nav.Link>
                 </Nav.Item>
-                {/* <Nav.Item>
-                  <Nav.Link href="/ResetPassword">Reset-Password</Nav.Link>
-                </Nav.Item> */}
               </Nav>
             </Container>
           </Navbar>
@@ -53,6 +54,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Home />} />
             <Route path="/logout" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/ResetPassword" element={<ResetPassword />} />
             <Route path="/posts" element={<PostIndex />} />
             <Route element={<ProtectedRoute />}>
