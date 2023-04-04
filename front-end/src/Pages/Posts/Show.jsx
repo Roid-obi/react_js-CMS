@@ -142,7 +142,7 @@ async function handleSubmitComment(e) {
     <strong className="me-auto">Info</strong>
     <small>Baru saja</small>
   </Toast.Header>
-  <Toast.Body>Komentar berhasil dibuat</Toast.Body>
+  <Toast.Body style={{backgroundColor: 'black', color: 'white'}}>Komentar Berhasil ditambahkan!</Toast.Body>
 </Toast>
 
       
