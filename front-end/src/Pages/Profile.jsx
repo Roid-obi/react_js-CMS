@@ -74,15 +74,15 @@ export default function Profile() {
         <Modal.Body>
           <Form>
             <Form.Group controlId="formBasicName">
-              <Form.Label>Name</Form.Label>
+              <Form.Label>New Name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter your name"
+                placeholder="Enter your new name"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
               />
             </Form.Group>
-            <Form.Group controlId="formBasicEmail">
+            <Form.Group className="mt-2" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control
                 type="email"

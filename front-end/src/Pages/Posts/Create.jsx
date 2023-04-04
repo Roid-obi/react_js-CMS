@@ -1,69 +1,63 @@
 import axios from "axios";
 import { useState } from "react";
-import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Button, Container, Form } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom'
 
-function PostCreate() {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+export default function PostCreate() {
 
-    const [validation, setValidation] = useState({});
+// perpindahan halaman
+  const navigate = useNavigate()
 
-    const navigate = useNavigate();
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
 
-    const storePost = async (e) => {
-        e.preventDefault();
-        await axios.post('http://localhost:8000/api/v1/posts', {
-            title: title,
-            content: content
-        })
-        .then(() => {
-            navigate('/posts');
-        })
-        .catch((error) => {
-            setValidation(error.response.data);
-        })
-        
-    };
-return (
-    <Container className="mt-3">
-        <Row>
-            <Col md="{12}">
-                <Card className="border-0 rounded shadow-sm">
-                    <Card.Body>
-                        {
-                        validation.errors &&
-                            <Alert variant="danger">
-                                <ul class="mt-0 mb-0">
-                                    { validation.errors.map((error, index) => (
-                                        <li key={index}>{ `${error.param} : ${error.msg}` }</li>
-                                    )) }
-                                </ul>
-                            </Alert>
-                        }
-                        <Form onSubmit={storePost}>
-                            <Form.Group className="mb-3">
-                                <Form.Label htmlFor="title">Title</Form.Label>
-                                <Form.Control name="title" id="title" type="text" placeholder="Title" />
-                            </Form.Group>
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+  };
 
-                            <Form.Group className="mb-3">
-                                <Form.Label htmlFor="content">Content</Form.Label>
-                                <Form.Control name="content" id="content" as="textarea" rows={3} placeholder="Content" />
-                            </Form.Group>
+  const handleBodyChange = (event) => {
+    setBody(event.target.value);
+  };
 
-                            
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:8000/api/posts', {
+        title: title,
+        body: body,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      console.log(response.data);
+      alert("Sukses membuat Post");
+      setTitle(""); //kosongkan
+      setBody(""); //kosongkan
+      navigate('/posts'); //ke posts
+    } catch (error) {
+      console.error(error);
+      alert("Failed to create post!");
+    }
+  };
 
-                            <Button variant="primary" type="submit">
-                                Send
-                            </Button>
-                        </Form>
-                    </Card.Body>
-                </Card>
-            </Col>
-        </Row>
-    </Container>
-);
+  return (
+    <div>
+      <Container className="mt-3">
+        <Button href="/posts" variant="dark" className="mb-3">Back to Posts</Button>
+        <h2>Create Post</h2>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="formTitle">
+            <Form.Label>Title</Form.Label>
+            <Form.Control type="text" placeholder="Enter title" value={title} onChange={handleTitleChange} />
+          </Form.Group>
+          <Form.Group className="mt-2" controlId="formBody">
+            <Form.Label>Body</Form.Label>
+            <Form.Control as="textarea" placeholder="Enter body" value={body} onChange={handleBodyChange} />
+          </Form.Group>
+          <Button className="mt-3" variant="dark" type="submit">Create</Button>
+        </Form>
+      </Container>
+    </div>
+  );
 }
-
-export default PostCreate;
