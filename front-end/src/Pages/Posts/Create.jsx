@@ -34,7 +34,7 @@ export default function PostCreate() {
       alert("Sukses membuat Post");
       setTitle(""); //kosongkan
       setBody(""); //kosongkan
-      navigate('/posts'); //ke posts
+      navigate('/postIndex'); //ke posts
     } catch (error) {
       console.error(error);
       alert("Failed to create post!");
@@ -44,7 +44,7 @@ export default function PostCreate() {
   return (
     <div>
       <Container className="mt-3">
-        <Button href="/posts" variant="dark" className="mb-3">Back to Posts</Button>
+        <Button href="/postIndex" variant="dark" className="mb-3">Back to Posts</Button>
         <h2>Create Post</h2>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formTitle">

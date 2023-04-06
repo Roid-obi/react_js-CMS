@@ -10,6 +10,7 @@ import Login from "./Pages/Login"
 import axios from 'axios'
 import ResetPassword from "./Pages/ResetPW"
 import Profile from "./Pages/Profile"
+import Posts from "./Pages/Posts/Posts"
 
 function App() {
   const token = localStorage.getItem('token')
@@ -41,6 +42,9 @@ function App() {
                   <Nav.Link href="/posts">Posts</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
+                  <Nav.Link href="/postIndex">PostIndex</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
                   <Nav.Link href='/login' className={token ? 'd-none' : ''}>Login</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
@@ -56,7 +60,8 @@ function App() {
             <Route path="/logout" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/ResetPassword" element={<ResetPassword />} />
-            <Route path="/posts" element={<PostIndex />} />
+            <Route path="/postIndex" element={<PostIndex />} />
+            <Route path="/posts" element={<Posts />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/posts/create" element={<PostCreate />} exact/>
             </Route>

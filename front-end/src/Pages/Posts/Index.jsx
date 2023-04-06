@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Row, Modal, Form } from "react-bootstrap";
+import { Button, Card, Col, Container, Row, Modal, Form, Table } from "react-bootstrap";
 
 export default function PostIndex() {
   const [posts, setPosts] = useState([]);
@@ -65,13 +65,20 @@ export default function PostIndex() {
         <Button href="/posts/create" variant="dark" className="mb-3">
           Create Post
         </Button>
-        <Row xs={1} sm={2} md={3} lg={4} className="g-4">
-          {posts.map((post, index) => (
-            <Col key={post.id}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>{post.title}</Card.Title>
-                  <Card.Text>{post.body}</Card.Text>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th className="w-20">Title</th>
+              <th className="w-50">Body</th>
+              <th className="w-30">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {posts.map((post, index) => (
+              <tr key={post.id}>
+                <td>{post.title}</td>
+                <td>{post.body}</td>
+                <td>
                   <Button href={`/post/${post.id}`} variant="dark" className="me-2">
                     Show
                   </Button>
@@ -85,12 +92,12 @@ export default function PostIndex() {
                   <Button variant="danger" onClick={() => handleDeletePost(post.id)}>
                     Delete
                   </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+  
         {/* modal update post */}
         <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
           <Modal.Header closeButton>
@@ -131,9 +138,8 @@ export default function PostIndex() {
             </Button>
           </Modal.Footer>
         </Modal>
-
-
       </Container>
     </div>
   );
+  
 }
