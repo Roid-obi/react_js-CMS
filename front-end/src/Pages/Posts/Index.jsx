@@ -6,9 +6,25 @@ export default function PostIndex() {
   const [posts, setPosts] = useState([]);
   const [updatePost, setUpdatePost] = useState({});
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
 
 
-
+// tags
+  useEffect(() => {
+    async function fetchTags() {
+      try {
+        const response = await axios.get("http://localhost:8000/api/tag");
+        setTags(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  
+    fetchTags();
+  }, []);
+  
+  // posts
   useEffect(() => {
     async function fetchData() {
       const response = await axios.get("http://localhost:8000/api/posts");
@@ -21,6 +37,7 @@ export default function PostIndex() {
   // modal update post
   const handleShowUpdateModal = (post) => {
     setUpdatePost(post);
+    setSelectedTags(post.tags.map(tag => tag.id));
     setShowUpdateModal(true);
   };
 
@@ -28,11 +45,15 @@ export default function PostIndex() {
   // update post
   const handleUpdatePost = async (post) => {
     try {
-      await axios.put(`http://localhost:8000/api/posts/${post.id}`, post, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      await axios.put(
+        `http://localhost:8000/api/posts/${post.id}`,
+        { ...post, tags: selectedTags },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       const updatedPosts = posts.map((p) => (p.id === post.id ? post : p));
       setPosts(updatedPosts);
       setShowUpdateModal(false);
@@ -40,6 +61,7 @@ export default function PostIndex() {
       console.log(error);
     }
   };
+  
   
   
 
@@ -70,6 +92,7 @@ export default function PostIndex() {
             <tr>
               <th className="w-20">Title</th>
               <th className="w-50">Body</th>
+              <th className="w-5">Views</th>
               <th className="w-30">Actions</th>
             </tr>
           </thead>
@@ -78,6 +101,7 @@ export default function PostIndex() {
               <tr key={post.id}>
                 <td>{post.title}</td>
                 <td>{post.body}</td>
+                <td>{post.views}</td>
                 <td>
                   <Button href={`/post/${post.id}`} variant="dark" className="me-2">
                     Show
@@ -104,31 +128,52 @@ export default function PostIndex() {
             <Modal.Title>Update Post</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
-              <Form.Group className="mb-3">
-                <Form.Label>Title</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter title"
-                  value={updatePost.title}
-                  onChange={(e) =>
-                    setUpdatePost({ ...updatePost, title: e.target.value })
-                  }
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Body</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  value={updatePost.body}
-                  onChange={(e) =>
-                    setUpdatePost({ ...updatePost, body: e.target.value })
-                  }
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
+  <Form>
+    <Form.Group className="mb-3">
+      <Form.Label>Title</Form.Label>
+      <Form.Control
+        type="text"
+        placeholder="Enter title"
+        value={updatePost.title}
+        onChange={(e) =>
+          setUpdatePost({ ...updatePost, title: e.target.value })
+        }
+      />
+    </Form.Group>
+    <Form.Group className="mb-3">
+      <Form.Label>Body</Form.Label>
+      <Form.Control
+        as="textarea"
+        rows={3}
+        value={updatePost.body}
+        onChange={(e) =>
+          setUpdatePost({ ...updatePost, body: e.target.value })
+        }
+      />
+    </Form.Group>
+    <Form.Group className="mb-3">
+      <Form.Label>Tags</Form.Label>
+      <br />
+      {tags.map((tag) => (
+        <Form.Check
+          type="checkbox"
+          key={tag.id}
+          label={tag.name}
+          value={tag.id}
+          checked={selectedTags.includes(tag.id)}
+          onChange={(e) => {
+            if (e.target.checked) {
+              setSelectedTags([...selectedTags, tag.id]);
+            } else {
+              setSelectedTags(selectedTags.filter((id) => id !== tag.id));
+            }
+          }}
+        />
+      ))}
+    </Form.Group>
+  </Form>
+</Modal.Body>
+
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowUpdateModal(false)}>
               Close

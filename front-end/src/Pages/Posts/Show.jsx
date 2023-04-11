@@ -95,14 +95,31 @@ async function handleSubmitComment(e) {
                     <p className="text-muted float-end fs-6">Created by : <span className="fw-bold">{post.created_by.name}</span></p>
                 </div>
                 <div className="text-center mt-3 mb-5">
+                <img src="/../public/images/def.jpg" alt="Default Post Image" className="mb-4" />
                   <p className="mb-0 fs-3 fw-bold">{post.title}</p>
                   <p>{post.body}</p>
                 </div>
-                  <small className="text-muted float-end">{post.create_at}</small>
-                    <span className='hover__' onClick={goBack}>
-                      Back
-                    </span>
+                {/* menampilkan daftar tag */}
+                  <div className="hover__ text-muted float-start fs-6">
+                    Tag:
+                    {post.tags.map((tag) => (
+                      <a
+                        href={`/posts/tag/${tag.name}`}
+                        key={tag.id}
+                        bg="secondary"
+                        className="me-2"
+                      >
+                        #{tag.name}
+                      </a>
+                    ))}
+                  </div>
+                  <small className="text-muted float-end">{post.created_at}</small>
+                  
+                    
             </Card.Body>
+                    <button className="back btn btn-dark mb-4" onClick={goBack}>
+                      Back
+                    </button>
           </Card>
         </Col>
       </Row>

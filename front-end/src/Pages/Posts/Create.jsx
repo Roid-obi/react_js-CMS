@@ -1,15 +1,23 @@
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 export default function PostCreate() {
-
-// perpindahan halaman
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      const response = await axios.get("http://localhost:8000/api/tag");
+      setTags(response.data.data);
+    };
+    fetchTags();
+  }, []);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -19,22 +27,32 @@ export default function PostCreate() {
     setBody(event.target.value);
   };
 
+  const handleTagChange = (event) => {
+    setSelectedTags(Array.from(event.target.selectedOptions, (option) => option.value));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/api/posts', {
-        title: title,
-        body: body,
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+      const response = await axios.post(
+        "http://localhost:8000/api/posts",
+        {
+          title: title,
+          body: body,
+          tags: selectedTags,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       console.log(response.data);
       alert("Sukses membuat Post");
-      setTitle(""); //kosongkan
-      setBody(""); //kosongkan
-      navigate('/postIndex'); //ke posts
+      setTitle("");
+      setBody("");
+      setSelectedTags([]);
+      navigate("/postIndex");
     } catch (error) {
       console.error(error);
       alert("Failed to create post!");
@@ -44,18 +62,55 @@ export default function PostCreate() {
   return (
     <div>
       <Container className="mt-3">
-        <Button href="/postIndex" variant="dark" className="mb-3">Back to Posts</Button>
+        <Button href="/postIndex" variant="dark" className="mb-3">
+          Back to Posts
+        </Button>
         <h2>Create Post</h2>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formTitle">
             <Form.Label>Title</Form.Label>
-            <Form.Control type="text" placeholder="Enter title" value={title} onChange={handleTitleChange} />
+            <Form.Control
+              type="text"
+              placeholder="Enter title"
+              value={title}
+              onChange={handleTitleChange}
+            />
           </Form.Group>
           <Form.Group className="mt-2" controlId="formBody">
             <Form.Label>Body</Form.Label>
-            <Form.Control as="textarea" placeholder="Enter body" value={body} onChange={handleBodyChange} />
+            <Form.Control
+              as="textarea"
+              placeholder="Enter body"
+              value={body}
+              onChange={handleBodyChange}
+            />
           </Form.Group>
-          <Button className="mt-3" variant="dark" type="submit">Create</Button>
+          <Form.Group className="mt-2" controlId="formTags">
+            {/* checkbox tag */}
+          <Form.Label>Tags</Form.Label>
+          {tags.map((tag) => (
+            <Form.Check
+              key={tag.id}
+              type="checkbox"
+              label={tag.name}
+              value={tag.id}
+              onChange={(event) => {
+                const tagId = parseInt(event.target.value);
+                if (event.target.checked) {
+                  setSelectedTags([...selectedTags, tagId]);
+                } else {
+                  setSelectedTags(selectedTags.filter((id) => id !== tagId));
+                }
+              }}
+              checked={selectedTags.includes(tag.id)}
+            />
+          ))}
+        </Form.Group>
+
+          <Button className="mt-3" variant="dark" type="submit">
+            Create
+          </Button
+>
         </Form>
       </Container>
     </div>
