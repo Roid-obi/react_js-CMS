@@ -9,7 +9,7 @@
 
 
 .back {
-    width: 10%;
+    max-width: 120px;;
     /* margin: auto; */
 }
 
@@ -19,6 +19,15 @@
 }
 
 .card-comment-reply {
+    margin-left: 100px;
     max-width: 500px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.toast {
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+    position: fixed;
+    top: 15px; 
+    right: 15px; 
+    z-index: 999;
 }

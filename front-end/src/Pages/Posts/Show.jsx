@@ -21,6 +21,8 @@ function PostShow() {
   const handleCloseReply = () => setShowReply(false);
   const handleShowReply = () => setShowReply(true);
   const [parentId, setParentId] = useState();
+  const [updateCommentReply, setUpdateCommentReply] = useState({});
+  const [showUpdateModalReply, setShowUpdateModalReply] = useState(false);
 
   // kembali
   function goBack() {
@@ -39,7 +41,6 @@ function PostShow() {
       setComment(response.data.comment);
       console.log(response.data.post);
       console.log(response.data.comment);
-
     }
     fetchPost();
   }, [id]);
@@ -50,7 +51,12 @@ function PostShow() {
       setUpdateComment(comment);
       setShowUpdateModal(true);
     };
-
+    
+    // modal update comment Reply
+    const handleShowUpdateModalReply = (reply) => {
+      setUpdateCommentReply(reply);
+      setShowUpdateModalReply(true);
+    };
 
     // Set token autentikasi pada setiap request API
   axios.interceptors.request.use(
@@ -90,7 +96,7 @@ function PostShow() {
 
       setTimeout(() => {
         setShowA(false);
-      }, 2600); // menunda panggilan setShowA(false) selama ... detik
+      }, 3000); // menunda panggilan setShowA(false) selama ... detik
 
     } catch (error) {
       console.error(error);
@@ -118,6 +124,27 @@ function PostShow() {
         console.log(error);
       }
     };
+
+    // update comment reply
+    const handleUpdateCommentReply = async (reply) => {
+      try {
+        await axios.put(
+          `http://localhost:8000/api/comment/${reply.id}`,
+          reply,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        const updatedComment = comments.map((r) => (r.id === reply.id ? reply : r));
+        setComment(updatedComment);
+        setShowUpdateModalReply(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
 
 // delele comment
 async function handleDeleteComment(commentId) {
@@ -185,11 +212,12 @@ async function handleDeleteComment(commentId) {
             id="commentContent"
             rows="3"
             value={commentContent}
+            
             onChange={(e) => setCommentContent(e.target.value)}
             required
           ></textarea>
         </div>
-        <button type="submit" className="btn btn-dark">
+        <button type="submit" onClick={() => { setParentId(null); }} className="btn btn-dark">
           Submit
         </button>
       </form>
@@ -255,6 +283,14 @@ async function handleDeleteComment(commentId) {
                         <Card.Text>{reply.content}</Card.Text>
                         <small className="text-muted">{reply.created_at_parse}</small>
                         <div className='float-end'>
+                        <Button
+                          className='me-2'
+                          variant="outline-warning"
+                          size="sm"
+                          onClick={() => handleShowUpdateModalReply(reply)}
+                        >
+                          Edit
+                        </Button>
                         <Button variant="outline-danger" size="sm" onClick={() => handleDeleteComment(reply.id)}>
                           Delete
                         </Button>
@@ -272,13 +308,13 @@ async function handleDeleteComment(commentId) {
       )}
 
       {/* toast */}
-      <Toast show={showA} onClose={toggleShowA} style={{position: 'fixed', top: '10px', right: '10px', zIndex: '9999'}}>
+      <Toast show={showA} className='toast' onClose={toggleShowA} style={{}}>
         <Toast.Header>
           <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
           <strong className="me-auto">Info</strong>
           <small>Baru saja</small>
         </Toast.Header>
-        <Toast.Body >Komentar Berhasil ditambahkan!</Toast.Body>
+        <Toast.Body className='text-success'>Komentar Berhasil ditambahkan!</Toast.Body>
       </Toast>
 
       {/* modal reply comment */}
@@ -287,26 +323,26 @@ async function handleDeleteComment(commentId) {
           <Modal.Title>Add Reply</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="mb-3">
-            <label htmlFor="content" className="form-label">
-              Content:{" "}
-            </label>
-            <textarea
-              className="form-control"
-              id="commentContent"
-              rows="3"
-              value={commentContent}
-              onChange={(e) => setCommentContent(e.target.value)}
-              required
-            ></textarea>
-          </div>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Content</Form.Label>
+              <Form.Control
+                className="form-control"
+                id="commentContent"
+                rows="3"
+                value={commentContent}
+                onChange={(e) => setCommentContent(e.target.value)}
+                required
+              />
+            </Form.Group>
+          </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseReply}>
             Close
           </Button>
           <Button variant="primary" onClick={handleSubmitComment}>
-            Save
+            Submit
           </Button>
         </Modal.Footer>
       </Modal>
@@ -336,6 +372,36 @@ async function handleDeleteComment(commentId) {
               Close
             </Button>
             <Button variant="warning" onClick={() => handleUpdateComment(updateComment)}>
+              Update
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        {/* modal update comment */}
+       <Modal show={showUpdateModalReply} onHide={() => setShowUpdateModalReply(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Update comment</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3">
+                <Form.Label>Content</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter title"
+                  value={updateCommentReply.content}
+                  onChange={(e) =>
+                    setUpdateCommentReply({ ...updateCommentReply, content: e.target.value })
+                  }
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowUpdateModalReply(false)}>
+              Close
+            </Button>
+            <Button variant="warning" onClick={() => handleUpdateCommentReply(updateCommentReply)}>
               Update
             </Button>
           </Modal.Footer>
