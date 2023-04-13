@@ -45,9 +45,9 @@ function PostByTag() {
         <Row xs={1} sm={2} md={3} lg={4} className="g-4">
           {posts.map((post, index) => (
             <Col key={post.id}>
-              <Card>
+              <Card className="card-post">
                 {/* Menambahkan gambar default */}
-                <Card.Img variant="top" src={defaultImage} />
+                <Card.Img variant="top" src={`https://source.unsplash.com/800x600/?${post.body}`} />
                 <Card.Body>
                   <Card.Title>{post.title}</Card.Title>
                   <Card.Text>{post.body}</Card.Text>

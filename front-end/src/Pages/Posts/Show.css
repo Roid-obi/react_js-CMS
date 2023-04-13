@@ -12,3 +12,13 @@
     width: 10%;
     /* margin: auto; */
 }
+
+.card-comment {
+    max-width: 600px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.card-comment-reply {
+    max-width: 500px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}

@@ -37,7 +37,7 @@ export default function PostIndex() {
   // modal update post
   const handleShowUpdateModal = (post) => {
     setUpdatePost(post);
-    setSelectedTags(post.tags.map(tag => tag.id));
+    setSelectedTags(post.tags.map(tag => tag.id)); //menyimpan nilai tag sebelumnya
     setShowUpdateModal(true);
   };
 
@@ -152,7 +152,7 @@ export default function PostIndex() {
       />
     </Form.Group>
     <Form.Group className="mb-3">
-      <Form.Label>Tags</Form.Label>
+      <Form.Label>Tags :</Form.Label>
       <br />
       {tags.map((tag) => (
         <Form.Check

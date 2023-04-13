@@ -4,6 +4,7 @@ import { Card, Row, Col, Button, Container, Modal, Form } from 'react-bootstrap'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+import './Home.css';
 
 function Home() {
   // perpindahan halaman
@@ -14,12 +15,7 @@ function Home() {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false); 
 
-  // style
-  const contain = {
-    backgroundColor: 'black',
-    padding: '20px',
-    borderRadius: '10px',
-  }
+  
   const token = localStorage.getItem('token');
 
   // reset password function
@@ -42,23 +38,23 @@ function Home() {
   }
 
   return (
-    <Container style={contain} className="mt-5">
+    <Container className="mt-5">
       <Row>
         <Col md="{12}">
-          <Card className="border-0 rounded shadow-sm">
-            <Card.Body className="p-4">
+          <Card className="cardhome">
+            <Card.Body className="chome p-4">
               <img src={viteLogo} className="logo" />
               <img src={reactLogo} className="logo react" />
               <h1>React.JS</h1>
               <p className="lead">Tutorial FullStack React.js oleh <strong>roidrobih@gmail.com</strong></p>
-              <Button href="https://github.com/Roid-obi/react_js-CMS" target="_blank" variant="dark" size="lg">Code</Button>
+              <Button className='mt-2 me-1' href="https://github.com/Roid-obi/react_js-CMS" target="_blank" variant="dark" size="lg">Code</Button>
               {token ? (
-              <Button className='ms-2' onClick={() => setShowModal(true)} variant="dark" size="lg">Reset Password</Button>
+              <Button className='cbu mt-2 me-1' onClick={() => setShowModal(true)} variant="dark" size="lg">Reset Password</Button>
               ) : '' }
               {token ?
-                <Button className='ms-2' href='/posts' variant="dark" size="lg">Get to Posts</Button>
+                <Button className='cbu mt-2' href='/posts' variant="dark" size="lg">Get to Posts</Button>
                 :
-                <Button className='ms-2' href='/login' variant='dark' size="lg">Login</Button>
+                <Button className='cbu mt-2' href='/login' variant='dark' size="lg">Login</Button>
               }
             </Card.Body>
           </Card>
