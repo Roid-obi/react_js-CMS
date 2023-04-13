@@ -20,7 +20,7 @@ function PostShow() {
   const [showReply, setShowReply] = useState(false);
   const handleCloseReply = () => setShowReply(false);
   const handleShowReply = () => setShowReply(true);
-  const [perentId, setPerentId] = useState();
+  const [parentId, setParentId] = useState();
 
   // kembali
   function goBack() {
@@ -75,19 +75,22 @@ function PostShow() {
       // kirim data komentar ke server menggunakan API POST
       const response = await axios.post(
         `http://localhost:8000/api/post/${id}/comments`,
-        { content: commentContent }
+        { content: commentContent,
+          parent_id: parentId,
+        }
       );
 
       const responseComment = await axios.get(`http://localhost:8000/api/posts/${id}`);
       setComment(responseComment.data.comment)
 
-
-      // perbarui state komentar dengan menambahkan komentar yang baru saja ditambahkan
-      // setComment((prevComments) => [...prevComments, response.data]);
       
       setCommentContent(''); // kosongkan input komentar setelah berhasil ditambahkan
       setShowA(true); // set state untuk menampilkan toast
-      // window.location.reload(); // memuat ulang halaman
+      setShowReply(false);
+
+      setTimeout(() => {
+        setShowA(false);
+      }, 2600); // menunda panggilan setShowA(false) selama ... detik
 
     } catch (error) {
       console.error(error);
@@ -219,7 +222,7 @@ async function handleDeleteComment(commentId) {
                     className='me-2'
                     onClick={() => {
                     handleShowReply();
-                    setPerentId(comment.id);
+                    setParentId(comment.id);
                     }}
                   >
                     Reply
@@ -279,7 +282,7 @@ async function handleDeleteComment(commentId) {
       </Toast>
 
       {/* modal reply comment */}
-      <Modal show={showReply} onHide={handleCloseReply}>
+      <Modal show={showReply}>
         <Modal.Header closeButton>
           <Modal.Title>Add Reply</Modal.Title>
         </Modal.Header>
