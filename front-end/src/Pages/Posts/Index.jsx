@@ -171,6 +171,19 @@ export default function PostIndex() {
         />
       ))}
     </Form.Group>
+    <Form.Group className="mb-3">
+        <Form.Label>Pin:</Form.Label>
+        <br />
+        <Form.Check
+          type="switch"
+          id="custom-switch"
+          label="Toggle this switch"
+          checked={updatePost.is_pinned}
+          onChange={(e) =>
+            setUpdatePost({ ...updatePost, is_pinned: e.target.checked })
+          }
+        />
+      </Form.Group>
   </Form>
 </Modal.Body>
 

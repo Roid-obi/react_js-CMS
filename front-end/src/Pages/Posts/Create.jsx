@@ -10,6 +10,8 @@ export default function PostCreate() {
   const [body, setBody] = useState("");
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [isPinned, setIsPinned] = useState(false);
+
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -27,10 +29,6 @@ export default function PostCreate() {
     setBody(event.target.value);
   };
 
-  const handleTagChange = (event) => {
-    setSelectedTags(Array.from(event.target.selectedOptions, (option) => option.value));
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -40,6 +38,7 @@ export default function PostCreate() {
           title: title,
           body: body,
           tags: selectedTags,
+          is_pinned: isPinned,
         },
         {
           headers: {
@@ -106,6 +105,17 @@ export default function PostCreate() {
             />
           ))}
         </Form.Group>
+        <Form.Group controlId="formPin" className="mt-3">
+          <Form.Label>Pin</Form.Label>
+          <Form.Check
+            type="switch"
+            id="custom-switch"
+            label="Toggle this switch"
+            checked={isPinned}
+            onChange={(e) => setIsPinned(e.target.checked)}
+          />
+        </Form.Group>
+
 
           <Button className="mt-3" variant="dark" type="submit">
             Create

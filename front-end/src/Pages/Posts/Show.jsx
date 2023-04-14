@@ -86,8 +86,9 @@ function PostShow() {
         }
       );
 
+      
       const responseComment = await axios.get(`http://localhost:8000/api/posts/${id}`);
-      setComment(responseComment.data.comment)
+      setComment(responseComment.data.comment);
 
       
       setCommentContent(''); // kosongkan input komentar setelah berhasil ditambahkan
@@ -146,17 +147,17 @@ function PostShow() {
     };
 
 
-// delele comment
-async function handleDeleteComment(commentId) {
-  try {
-    await axios.delete(`http://localhost:8000/api/comment/${commentId}`);
-    const response = await axios.get(`http://localhost:8000/api/posts/${id}`);
-    setComment(response.data.comment);
-  } catch (error) {
-    console.error(error);
-    alert('Failed to delete comment');
-  }
-}
+    // delele comment
+    async function handleDeleteComment(commentId) {
+      try {
+        await axios.delete(`http://localhost:8000/api/comment/${commentId}`);
+        const response = await axios.get(`http://localhost:8000/api/posts/${id}`);
+        setComment(response.data.comment);
+      } catch (error) {
+        console.error(error);
+        alert('Failed to delete comment');
+      }
+    }
 
 
   return (
@@ -377,7 +378,7 @@ async function handleDeleteComment(commentId) {
           </Modal.Footer>
         </Modal>
 
-        {/* modal update comment */}
+        {/* modal update comment reply */}
        <Modal show={showUpdateModalReply} onHide={() => setShowUpdateModalReply(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Update comment</Modal.Title>

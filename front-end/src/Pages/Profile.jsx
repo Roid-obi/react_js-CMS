@@ -56,7 +56,11 @@ export default function Profile() {
               <Card.Text className="profile-email">{profileData.email}</Card.Text>
               <Button
                 className="btun-edit"
-                onClick={() => setShowEditModal(true)}
+                onClick={() => {
+                  setShowEditModal(true);
+                  setNewName(profileData.name);
+                  setNewEmail(profileData.email);
+                }}
                 variant="dark"
                 size=""
               >

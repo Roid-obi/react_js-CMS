@@ -10,13 +10,29 @@ function Home() {
   // perpindahan halaman
   const navigate = useNavigate()
 
+  
+
   // state
   const [email, setEmail] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false); 
+  const [profileData, setProfileData] = useState(null);
 
   
   const token = localStorage.getItem('token');
+
+  // email
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get("http://localhost:8000/api/profile", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setProfileData(response.data.user);
+    }
+    fetchData();
+  }, []);
 
   // reset password function
   const handleResetPassword = () => {
@@ -49,7 +65,7 @@ function Home() {
               <p className="lead">Tutorial FullStack React.js oleh <strong>roidrobih@gmail.com</strong></p>
               <Button className='mt-2 me-1' href="https://github.com/Roid-obi/react_js-CMS" target="_blank" variant="dark" size="lg">Code</Button>
               {token ? (
-              <Button className='cbu mt-2 me-1' onClick={() => setShowModal(true)} variant="dark" size="lg">Reset Password</Button>
+              <Button className='cbu mt-2 me-1' onClick={() => {setShowModal(true), setEmail(profileData.email)}} variant="dark" size="lg">Reset Password</Button>
               ) : '' }
               {token ?
                 <Button className='cbu mt-2' href='/posts' variant="dark" size="lg">Get to Posts</Button>
