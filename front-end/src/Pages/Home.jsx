@@ -17,6 +17,7 @@ function Home() {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false); 
   const [profileData, setProfileData] = useState(null);
+  const [isPasswordReset, setIsPasswordReset] = useState(true);
 
   
   const token = localStorage.getItem('token');
@@ -44,8 +45,9 @@ function Home() {
     })
       .then(response => {
         // berhasil
-        setIsLoading(false); // set isLoading false saat handleResetPassword berhasil
-        navigate('/ResetPassword');
+        setIsLoading(false);
+        setShowModal(false);
+        setIsPasswordReset(false); // set isPasswordReset true saat berhasil
       })
       .catch(error => {
         console.log(error.response.data);
@@ -57,6 +59,7 @@ function Home() {
     <Container className="mt-5">
       <Row>
         <Col md="{12}">
+        {isPasswordReset ? (
           <Card className="cardhome">
             <Card.Body className="chome p-4">
               <img src={viteLogo} className="logo" />
@@ -74,6 +77,17 @@ function Home() {
               }
             </Card.Body>
           </Card>
+          ) : (
+            <Card>
+              <Card.Header>
+                Info
+              </Card.Header>
+              <Card.Body>
+                <h5>Cek email anda, Kirim ulang jika tidak ada</h5>
+                <span className='btn btn-secondary' onClick={()=> setShowModal(true)}>Kirim Ulang</span>
+              </Card.Body>
+            </Card>
+            )}
         </Col>
       </Row>
       <Modal show={showModal} onHide={() => setShowModal(false)}>

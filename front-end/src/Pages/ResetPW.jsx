@@ -1,12 +1,15 @@
-import { useState } from "react"
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 export default function ResetPassword() {
   const [token, setToken] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
+  const search = useLocation().search;
+  const tokenParam = new URLSearchParams(search).get('token');
+  const emailParam = new URLSearchParams(search).get('email');
 
   const handleResetPassword = async (event) => {
     event.preventDefault();
@@ -14,9 +17,9 @@ export default function ResetPassword() {
     await axios.post(
         "http://localhost:8000/api/password/reset",
         {
-          email,
-          token,
-          password,
+          token: token,
+          email: email,
+          password: password,
         },
         {
           headers: {
@@ -33,6 +36,11 @@ export default function ResetPassword() {
         console.log(error.response.data);
       });
   };
+
+  useEffect(() => {
+    setToken(tokenParam)
+    setEmail(emailParam)
+  },[])
 
   return (
     <div className="container">
@@ -52,7 +60,7 @@ export default function ResetPassword() {
                     id="token"
                     placeholder="token"
                     onChange={(e) => setToken(e.target.value)}
-                    value={token}
+                    value={tokenParam}
                   />
                 </div>
                 <div className="form-group mb-2">
@@ -63,7 +71,7 @@ export default function ResetPassword() {
                     id="email"
                     placeholder="Email"
                     onChange={(e) => setEmail(e.target.value)}
-                    value={email}
+                    value={emailParam}
                   />
                 </div>
                 <div className="form-group mb-2">
