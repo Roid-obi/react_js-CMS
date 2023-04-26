@@ -26,7 +26,8 @@ export default function Posts() {
             <Carousel.Item key={post.id}>
               <img
                 className="d-block w-100"
-                src={`https://source.unsplash.com/1800x600/?${post.body}`}
+                // src={`https://source.unsplash.com/1800x600/?${post.body}`}
+                src={`http://127.0.0.1:8000/images/${[post.image]}`}
                 alt={post.title}
               />
               <Carousel.Caption>
@@ -53,7 +54,10 @@ export default function Posts() {
             <Col key={post.id}>
                 <Card className="card-post">
                   {/* Menambahkan gambar default */}
-                  <Card.Img variant="top" src={`https://source.unsplash.com/800x600/?${post.body}`} />
+                  {/* <Card.Img variant="top" src={`https://source.unsplash.com/800x600/?${post.body}`} /> */}
+                  <Card.Img variant="top" src={`http://127.0.0.1:8000/images/${[post.image]}`} />
+                
+                  
                   <Card.Body>
                     <Card.Title>{post.title}</Card.Title>
                     <Card.Text>{post.body}</Card.Text>
@@ -66,6 +70,18 @@ export default function Posts() {
                           className="hover__ me-2"
                         >
                           #{tag.name}
+                        </a>
+                      ))}
+                    </Card.Text>
+                    <Card.Text>
+                    Category: {post.categories.map((category) => (
+                        <a
+                          href={`/posts/category/${category.name}`}
+                          key={category.id}
+                          bg="secondary"
+                          className="hover__ me-2"
+                        >
+                          #{category.name}
                         </a>
                       ))}
                     </Card.Text>

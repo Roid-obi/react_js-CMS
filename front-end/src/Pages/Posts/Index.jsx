@@ -8,6 +8,8 @@ export default function PostIndex() {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
 
 // tags
@@ -22,6 +24,20 @@ export default function PostIndex() {
     }
   
     fetchTags();
+  }, []);
+
+  // categories
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await axios.get("http://localhost:8000/api/category");
+        setCategories(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  
+    fetchCategories();
   }, []);
   
   // posts
@@ -38,6 +54,7 @@ export default function PostIndex() {
   const handleShowUpdateModal = (post) => {
     setUpdatePost(post);
     setSelectedTags(post.tags.map(tag => tag.id)); //menyimpan nilai tag sebelumnya
+    setSelectedCategories(post.categories.map(category => category.id)); //menyimpan nilai category sebelumnya
     setShowUpdateModal(true);
   };
 
@@ -47,7 +64,7 @@ export default function PostIndex() {
     try {
       await axios.put(
         `http://localhost:8000/api/posts/${post.id}`,
-        { ...post, tags: selectedTags },
+        { ...post, tags: selectedTags, categories: selectedCategories },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -166,6 +183,26 @@ export default function PostIndex() {
               setSelectedTags([...selectedTags, tag.id]);
             } else {
               setSelectedTags(selectedTags.filter((id) => id !== tag.id));
+            }
+          }}
+        />
+      ))}
+    </Form.Group>
+    <Form.Group className="mb-3">
+      <Form.Label>Categories :</Form.Label>
+      <br />
+      {categories.map((category) => (
+        <Form.Check
+          type="checkbox"
+          key={category.id}
+          label={category.name}
+          value={category.id}
+          checked={selectedCategories.includes(category.id)}
+          onChange={(e) => {
+            if (e.target.checked) {
+              setSelectedCategories([...selectedCategories, category.id]);
+            } else {
+              setSelectedCategories(selectedCategories.filter((id) => id !== category.id));
             }
           }}
         />

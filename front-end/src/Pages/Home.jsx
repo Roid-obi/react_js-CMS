@@ -78,18 +78,20 @@ function Home() {
             </Card.Body>
           </Card>
           ) : (
-            <Card>
-              <Card.Header>
+            <Card className='cardhome'>
+              <Card.Header className='bg-dark text-white'>
                 Info
               </Card.Header>
               <Card.Body>
-                <h5>Cek email anda, Kirim ulang jika tidak ada</h5>
-                <span className='btn btn-secondary' onClick={()=> setShowModal(true)}>Kirim Ulang</span>
+                <h5>Cek email anda, Coba Kirim ulang jika tidak ada</h5>
+                <span className='btn btn-secondary mt-2' onClick={()=> setShowModal(true)}>Kirim Ulang</span>
               </Card.Body>
             </Card>
             )}
         </Col>
       </Row>
+
+
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Reset Password</Modal.Title>
@@ -97,7 +99,7 @@ function Home() {
         <Modal.Body>
           <Form>
             <Form.Group controlId="formEmail">
-              <Form.Label>Email address</Form.Label>
+              <Form.Label>Confirm Email</Form.Label>
               <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </Form.Group>
           </Form>

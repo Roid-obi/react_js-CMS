@@ -10,6 +10,8 @@ export default function PostCreate() {
   const [body, setBody] = useState("");
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [isPinned, setIsPinned] = useState(false);
 
 
@@ -19,6 +21,14 @@ export default function PostCreate() {
       setTags(response.data.data);
     };
     fetchTags();
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const response = await axios.get("http://localhost:8000/api/category");
+      setCategories(response.data.data);
+    };
+    fetchCategories();
   }, []);
 
   const handleTitleChange = (event) => {
@@ -38,6 +48,7 @@ export default function PostCreate() {
           title: title,
           body: body,
           tags: selectedTags,
+          categories: selectedCategories,
           is_pinned: isPinned,
         },
         {
@@ -51,6 +62,7 @@ export default function PostCreate() {
       setTitle("");
       setBody("");
       setSelectedTags([]);
+      setSelectedCategories([]);
       navigate("/postIndex");
     } catch (error) {
       console.error(error);
@@ -102,6 +114,27 @@ export default function PostCreate() {
                 }
               }}
               checked={selectedTags.includes(tag.id)}
+            />
+          ))}
+        </Form.Group>
+        <Form.Group className="mt-2" controlId="formCategories">
+            {/* checkbox Category */}
+          <Form.Label>Categories</Form.Label>
+          {categories.map((category) => (
+            <Form.Check
+              key={category.id}
+              type="checkbox"
+              label={category.name}
+              value={category.id}
+              onChange={(event) => {
+                const categoryId = parseInt(event.target.value);
+                if (event.target.checked) {
+                  setSelectedCategories([...selectedCategories, categoryId]);
+                } else {
+                  setSelectedCategories(selectedCategories.filter((id) => id !== categoryId));
+                }
+              }}
+              checked={selectedCategories.includes(category.id)}
             />
           ))}
         </Form.Group>
