@@ -11,7 +11,8 @@ function Tags() {
       axios
         .get('http://localhost:8000/api/tag')
         .then((response) => {
-          setTags(response.data.data);
+          const reversedTags = response.data.data.reverse(); //agar data yang terbaru ditaruh di paling atas
+          setTags(reversedTags);
           console.log(response.data.data);
         })
         .catch((error) => {

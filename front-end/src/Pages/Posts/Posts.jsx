@@ -12,8 +12,9 @@ export default function Posts() {
   useEffect(() => {
     async function fetchData() {
       const response = await axios.get("http://localhost:8000/api/posts");
-      setPosts(response.data.posts.data);
-      setPinnedPosts(response.data.posts.data.filter(post => post.is_pinned));
+      const reversedPosts = response.data.posts.data.reverse(); //agar data yang terbaru ditaruh di paling atas
+      setPosts(reversedPosts);
+      setPinnedPosts(reversedPosts.filter(post => post.is_pinned));
     }
     fetchData();
   }, []);
@@ -27,8 +28,11 @@ export default function Posts() {
               <img
                 className="d-block w-100"
                 // src={`https://source.unsplash.com/1800x600/?${post.body}`}
-                src={`http://127.0.0.1:8000/images/${[post.image]}`}
-                alt={post.title}
+                src={post.image ? `http://127.0.0.1:8000/images/${[post.image]}` : `https://source.unsplash.com/1800x600/?${post.body}`}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = defaultImage; // Optional: Set a default image as fallback
+                    }}
               />
               <Carousel.Caption>
                 <h3>{post.title}</h3>
@@ -55,7 +59,14 @@ export default function Posts() {
                 <Card className="card-post">
                   {/* Menambahkan gambar default */}
                   {/* <Card.Img variant="top" src={`https://source.unsplash.com/800x600/?${post.body}`} /> */}
-                  <Card.Img variant="top" src={`http://127.0.0.1:8000/images/${[post.image]}`} />
+                  <Card.Img
+                    variant="top"
+                    src={post.image ? `http://127.0.0.1:8000/images/${[post.image]}` : `https://source.unsplash.com/800x600/?${post.body}`}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = defaultImage; // Optional: Set a default image as fallback
+                    }}
+                  />
                 
                   
                   <Card.Body>

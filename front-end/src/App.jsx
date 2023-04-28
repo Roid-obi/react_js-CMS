@@ -49,7 +49,7 @@ function App() {
               
             </Nav>
             <Nav className="ms-auto">
-              <NavDropdown title="Menu" id="basic-nav-dropdown" align="end">
+              <NavDropdown title="Dashboard" id="basic-nav-dropdown" align="end">
                   <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
                   <NavDropdown.Item href="/postIndex">PostIndex</NavDropdown.Item>
                   <NavDropdown.Item href="/tags">Tags</NavDropdown.Item>
@@ -60,7 +60,7 @@ function App() {
                     :
                     <NavDropdown.Item href="/login">Login</NavDropdown.Item>
                   }
-                </NavDropdown>
+              </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Container>

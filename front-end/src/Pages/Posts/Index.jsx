@@ -44,7 +44,8 @@ export default function PostIndex() {
   useEffect(() => {
     async function fetchData() {
       const response = await axios.get("http://localhost:8000/api/posts");
-      setPosts(response.data.posts.data);
+      const reversedPosts = response.data.posts.data.reverse(); //agar data yang terbaru ditaruh di paling atas
+      setPosts(reversedPosts);
       console.log(response.data.posts.data);
     }
     fetchData();
@@ -193,21 +194,21 @@ export default function PostIndex() {
       <br />
       {categories.map((category) => (
         <Form.Check
-          type="checkbox"
+          type="radio"
           key={category.id}
           label={category.name}
           value={category.id}
+          name="category"
           checked={selectedCategories.includes(category.id)}
           onChange={(e) => {
             if (e.target.checked) {
-              setSelectedCategories([...selectedCategories, category.id]);
-            } else {
-              setSelectedCategories(selectedCategories.filter((id) => id !== category.id));
+              setSelectedCategories([category.id]);
             }
           }}
         />
       ))}
     </Form.Group>
+
     <Form.Group className="mb-3">
         <Form.Label>Pin:</Form.Label>
         <br />

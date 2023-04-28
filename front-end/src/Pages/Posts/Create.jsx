@@ -118,20 +118,19 @@ export default function PostCreate() {
           ))}
         </Form.Group>
         <Form.Group className="mt-2" controlId="formCategories">
-            {/* checkbox Category */}
           <Form.Label>Categories</Form.Label>
           {categories.map((category) => (
             <Form.Check
               key={category.id}
-              type="checkbox"
+              type="radio"
               label={category.name}
               value={category.id}
               onChange={(event) => {
                 const categoryId = parseInt(event.target.value);
                 if (event.target.checked) {
-                  setSelectedCategories([...selectedCategories, categoryId]);
+                  setSelectedCategories([categoryId]);
                 } else {
-                  setSelectedCategories(selectedCategories.filter((id) => id !== categoryId));
+                  setSelectedCategories([]);
                 }
               }}
               checked={selectedCategories.includes(category.id)}

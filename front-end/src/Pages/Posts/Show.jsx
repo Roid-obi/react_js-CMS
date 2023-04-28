@@ -173,7 +173,12 @@ function PostShow() {
                     <p className="text-muted float-end fs-6">Created by : <span className="fw-bold">{post.created_by.name}</span></p>
                 </div>
                 <div className="text-center mt-3 mb-5">
-                <img src={`https://source.unsplash.com/800x500/?${post.body}`} alt="Default Post Image" className="mb-4" />
+                <img src={post.image ? `http://127.0.0.1:8000/images/${[post.image]}` : `https://source.unsplash.com/800x500/?${post.body}`}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = defaultImage; // Optional: Set a default image as fallback alt="Default Post Image" className="mb-4" 
+                    }}
+                      />
                   <p className="mb-0 fs-3 fw-bold">{post.title}</p>
                   <p>{post.body}</p>
                 </div>

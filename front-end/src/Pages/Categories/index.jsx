@@ -11,7 +11,8 @@ function Categories() {
       axios
         .get('http://localhost:8000/api/category')
         .then((response) => {
-          setCategories(response.data.data);
+          const reversedc = response.data.data.reverse(); //agar data yang terbaru ditaruh di paling atas
+          setCategories(reversedc);
           console.log(response.data.data);
         })
         .catch((error) => {

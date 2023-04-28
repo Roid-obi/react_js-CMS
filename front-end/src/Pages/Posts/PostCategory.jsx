@@ -6,15 +6,15 @@ import defaultImage from "/../public/images/def.jpg";
 import './PostCategory.css'
 
 function PostByCategory() {
-  const [tags, setTags] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [posts, setPosts] = useState([]);
-  const { tag } = useParams();
+  const { category } = useParams();
 
   useEffect(() => {
     // Memuat semua tag yang tersedia dari API
-    axios.get('http://localhost:8000/api/tag')
+    axios.get('http://localhost:8000/api/category')
       .then(response => {
-        setTags(response.data.data);
+        setCategories(response.data.data);
       })
       .catch(error => {
         console.log(error);
@@ -23,8 +23,8 @@ function PostByCategory() {
 
   useEffect(() => {
     // Memuat post berdasarkan tag yang dipilih dari API
-    if (tag) {
-      axios.get(`http://localhost:8000/api/posts/tag/${tag}`)
+    if (category) {
+      axios.get(`http://localhost:8000/api/posts/category/${category}`)
         .then(response => {
           setPosts(response.data.posts.data);
           console.log(response.data.posts.data);
@@ -33,12 +33,12 @@ function PostByCategory() {
           console.log(error);
         });
     }
-  }, [tag]);
+  }, [category]);
 
   return (
     <div>
       <header className="text-center my-5">
-      <h1>Tag: {tag}</h1>
+      <h1>Category: {category}</h1>
       </header>
       {posts.length > 0 ? (
         <Container className="mt-3">
@@ -51,19 +51,18 @@ function PostByCategory() {
                 <Card.Body>
                   <Card.Title>{post.title}</Card.Title>
                   <Card.Text>{post.body}</Card.Text>
-                  <Card.Text>
-                  Tag: {post.tags.map((tag) => (
+                    <Card.Text>
+                    Category: {post.categories.map((category) => (
                         <a
-                          href={`/posts/tag/${tag.name}`}
-                          key={tag.id}
+                          href={`/posts/category/${category.name}`}
+                          key={category.id}
                           bg="secondary"
-                          className="me-2"
+                          className="hover__ me-2"
                         >
-                          #{tag.name}
+                          #{category.name}
                         </a>
-                        ))}
-                      
-                  </Card.Text>
+                      ))}
+                    </Card.Text>
                   <Button href={`/post/${post.id}`} variant="dark" className="me-2">
                     Show
                   </Button>
