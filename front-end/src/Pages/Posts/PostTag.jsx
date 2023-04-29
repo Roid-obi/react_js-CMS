@@ -47,7 +47,15 @@ function PostByTag() {
             <Col key={post.id}>
               <Card className="card-post">
                 {/* Menambahkan gambar default */}
-                <Card.Img variant="top" src={`https://source.unsplash.com/800x600/?${post.body}`} />
+                <Card.Img
+                  className="card-img-top"
+                  variant="top"
+                  src={post.image ? `http://127.0.0.1:8000/images/${[post.image]}` : `https://source.unsplash.com/800x600/?${post.body}`}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = defaultImage; // Optional: Set a default image as fallback
+                  }}
+                />
                 <Card.Body>
                   <Card.Title>{post.title}</Card.Title>
                   <Card.Text>{post.body}</Card.Text>

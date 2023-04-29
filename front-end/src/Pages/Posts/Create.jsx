@@ -13,7 +13,7 @@ export default function PostCreate() {
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isPinned, setIsPinned] = useState(false);
-
+  const [image, setImage] = useState(null); // state untuk menampung file gambar yang dipilih
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -39,21 +39,39 @@ export default function PostCreate() {
     setBody(event.target.value);
   };
 
+  const handleImageChange = (event) => {
+    setImage(event.target.files[0]); // set state dengan file yang dipilih oleh pengguna
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("body", body);
+      // cek apakah image ada sebelum menambahkannya ke FormData
+      if (image) {
+        formData.append("image", image);
+      } else {
+        formData.append("image", "");
+      }
+  
+      // Masukkan data tags, categories, dan is_pinned ke dalam FormData
+      selectedTags.forEach((tagId) => {
+        formData.append("tags[]", tagId);
+      });
+      selectedCategories.forEach((categoryId) => {
+        formData.append("categories[]", categoryId);
+      });
+      formData.append("is_pinned", isPinned ? 1 : 0);
+  
       const response = await axios.post(
         "http://localhost:8000/api/posts",
-        {
-          title: title,
-          body: body,
-          tags: selectedTags,
-          categories: selectedCategories,
-          is_pinned: isPinned,
-        },
+        formData,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -63,12 +81,14 @@ export default function PostCreate() {
       setBody("");
       setSelectedTags([]);
       setSelectedCategories([]);
+      setImage(null);
       navigate("/postIndex");
     } catch (error) {
       console.error(error);
       alert("Failed to create post!");
     }
   };
+  
 
   return (
     <div>
@@ -137,6 +157,14 @@ export default function PostCreate() {
             />
           ))}
         </Form.Group>
+        <Form.Group className="mt-2" controlId="formImage">
+        <Form.Label>Image</Form.Label>
+        <Form.Control 
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+      </Form.Group>
         <Form.Group controlId="formPin" className="mt-3">
           <Form.Label>Pin</Form.Label>
           <Form.Check

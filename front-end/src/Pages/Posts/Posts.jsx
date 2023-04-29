@@ -26,14 +26,14 @@ export default function Posts() {
           {pinnedPosts.map(post => (
             <Carousel.Item key={post.id}>
               <img
-                className="d-block w-100"
-                // src={`https://source.unsplash.com/1800x600/?${post.body}`}
+                className="d-block w-100 carousel-img"
                 src={post.image ? `http://127.0.0.1:8000/images/${[post.image]}` : `https://source.unsplash.com/1800x600/?${post.body}`}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = defaultImage; // Optional: Set a default image as fallback
-                    }}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = defaultImage; // Optional: Set a default image as fallback
+                }}
               />
+
               <Carousel.Caption>
                 <h3>{post.title}</h3>
                 <p>{post.body}</p>
@@ -60,13 +60,14 @@ export default function Posts() {
                   {/* Menambahkan gambar default */}
                   {/* <Card.Img variant="top" src={`https://source.unsplash.com/800x600/?${post.body}`} /> */}
                   <Card.Img
-                    variant="top"
-                    src={post.image ? `http://127.0.0.1:8000/images/${[post.image]}` : `https://source.unsplash.com/800x600/?${post.body}`}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = defaultImage; // Optional: Set a default image as fallback
-                    }}
-                  />
+                  className="card-img-top"
+                  variant="top"
+                  src={post.image ? `http://127.0.0.1:8000/images/${[post.image]}` : `https://source.unsplash.com/800x600/?${post.body}`}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = defaultImage; // Optional: Set a default image as fallback
+                  }}
+                />
                 
                   
                   <Card.Body>
@@ -92,7 +93,7 @@ export default function Posts() {
                           bg="secondary"
                           className="hover__ me-2"
                         >
-                          #{category.name}
+                          {category.name}
                         </a>
                       ))}
                     </Card.Text>
